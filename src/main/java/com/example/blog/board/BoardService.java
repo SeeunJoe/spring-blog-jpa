@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class BoardService {
@@ -50,7 +51,7 @@ public class BoardService {
         //boardRepository.update(id, updateDTO.getTitle(), updateDTO.getContent());
         Board board = boardRepository.findById(id)
                 .orElseThrow( () -> new Exception404("해당 id의 게시글이 없습니다 : "+id)); // 1. 조회
-        board.update(updateDTO.getTitle(), updateDTO.getContent());
+       // boardRepository.update(updateDTO.getTitle(), updateDTO.getContent());
         // 영속화된 객체상태 변경 - update + commit => 더티체킹
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.Optional;
 
 // @RequiredArgsConstuctor -> test에서는 롬복을 따로 추가하지 않아 사용할 수 없으므로 @Autowired를 사용한다.
 @Import(BoardRepository.class)
@@ -17,33 +18,23 @@ public class BoardRepositoryTest {
     @Autowired // -> 의존성 주입 : Spring
     private BoardRepository boardRepository;
 
-    public void delete_test(){
+
+    @Test
+    public void findById_Test(){
         //given
-        int id= 1;
+        Integer id = 1;
 
         //when
-        boardRepository.delete(id);
+        Optional<Board> boardOP = boardRepository.findById(id);
+        Board board = boardOP.get();
 
         //eye
-        List<Board> boardList = boardRepository.findAll();
-        System.out.println("size : "+ boardList.size());
+        System.out.println("Lazy Loading 직전");
+        String title = board.getUser().getUsername();
+        System.out.println("Lazy Loading 직후");
+
+
     }
-
-    public void save_test(){
-        // given
-        String title = "제목6";
-        String content = "내용6";
-
-        // when
-        boardRepository.save(title, content);
-
-        // eye
-        Board board = boardRepository.findById(6);
-        System.out.println(board.getId());
-        System.out.println(board.getTitle());
-        System.out.println(board.getContent());
-
-    } // rollback (@Transactional)
 
     @Test
     public void findAll_test(){

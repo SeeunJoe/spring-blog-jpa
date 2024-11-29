@@ -4,10 +4,11 @@
 <!--    title=제목6&content=내용6 -&ndash;&gt;application/x-www-form-urlencoded
     key값은 input태그의 name
     value값은 input태그의 사용자가 입력하는 값 -->
-    <form action="/board/save" method="post" enctype="application/x-www-form-urlencoded">
-        <input type="text" name="title" placeholder="제목"><br>
-        <input type="text" name="content" placeholder="내용"><br>
-        <button type="submit">글쓰기</button>
+    <form action="/join" method="post">
+        <input type="text" name="username" placeholder="아이디"><br>
+        <input type="text" name="password" placeholder="패스워드"><br>
+        <input type="text" name="email" placeholder="이메일"><br>
+        <button type="submit">회원가입</button>
     </form>
 </section>
 
