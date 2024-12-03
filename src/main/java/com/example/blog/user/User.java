@@ -1,6 +1,7 @@
 package com.example.blog.user;
 
 import com.example.blog.board.Board;
+import com.example.blog.reply.Reply;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

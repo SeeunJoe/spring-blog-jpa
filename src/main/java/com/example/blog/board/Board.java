@@ -1,5 +1,6 @@
 package com.example.blog.board;
 
+import com.example.blog.reply.Reply;
 import com.example.blog.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,6 +8,8 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access= AccessLevel.PROTECTED) // DB에서 조회해서 가져온 RS를 디폴트 생성자를 호출해서 new하고 값을 채워준다.
 @Getter
@@ -18,8 +21,12 @@ public class Board {
     private Integer id;
     private String title;
     private String content;
+
     @ManyToOne(fetch = FetchType.LAZY) // 연관관계 설정
     private User user;
+
+    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER) //fk의 변수명이 뭐야?
+    private List<Reply> replies = new ArrayList<Reply>();
 
     @CreationTimestamp
     private Timestamp createdAt;

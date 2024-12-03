@@ -1,5 +1,7 @@
 package com.example.blog.board;
 
+import com.example.blog._core.error.ex.Exception400;
+import com.example.blog._core.error.ex.Exception404;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,33 @@ public class BoardRepository {
 
     // JPA는 EntityManager로 DB에 접근한다 (자바에서 DBConnection)
     private final EntityManager em;
+    public Optional<Board> findByIdJoinUserAndReply(int id){
+        String sql = """
+                select b from Board b join fetch b.user left join fetch b.replies r left join fetch r.user  where b.id=:id
+                """;
+        Query q = em.createQuery(sql,Board.class);
+        q.setParameter("id",id);
+        try {
+            Board board = (Board) q.getSingleResult();
+            return Optional.of(board);
+        } catch (RuntimeException e) {
+            return Optional.ofNullable(null);
+        }
+    }
+
+    public Optional<Board> findByIdJoinUser(int id){
+        String sql = """
+                select b from Board b join fetch b.user where b.id=:id
+                """;
+        Query q = em.createQuery(sql,Board.class);
+        q.setParameter("id",id);
+        try {
+            Board board = (Board) q.getSingleResult();
+            return Optional.of(board);
+        } catch (RuntimeException e) {
+            return Optional.ofNullable(null);
+        }
+    }
 
     //조회만 하면 업데이트가 알아서 되기 때문에 업데이트 필요없다.
 /*    public void update(int id, String title, String content) {
@@ -53,7 +82,9 @@ public class BoardRepository {
         q.setParameter(1, id); // 물음표 완성하기 (물음표 순서, 물음표에 바인딩될 변수값)
         return (Board) q.getSingleResult();
         }
- */ public Optional<Board> findById(int id) {
+ */
+    public Optional<Board> findById(int id) {
+
      return Optional.ofNullable(em.find(Board.class, id));
     }
 }

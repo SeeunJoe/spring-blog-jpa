@@ -2,7 +2,13 @@ package com.example.blog.board;
 
 
 import com.example.blog._core.util.MyDate;
+import com.example.blog.reply.Reply;
+import com.example.blog.user.User;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BoardResponse {
 
@@ -12,6 +18,7 @@ public class BoardResponse {
         private String title;
         private String content;
         private String createdAt;
+
 
         public UpdateFormDTO(Board board) {
             this.id = board.getId();
@@ -28,11 +35,44 @@ public class BoardResponse {
         private String content;
         private String createdAt;
 
-        public DetailDTO(Board board) {
+        private Integer userId;
+        private String username;
+        private boolean isOwner = false;
+
+        private List<ReplyDTO> replies;
+
+        @Data
+        class ReplyDTO {
+
+            private int id;
+            private String comment;
+            private int userId;
+            private String username;
+
+            public ReplyDTO(Reply reply) {
+                this.id = reply.getId();
+                this.comment = reply.getComment();
+                this.userId = reply.getUser().getId();
+                this.username = reply.getUser().getUsername();
+                boolean sessionUser;
+            }
+        }
+
+        public DetailDTO(Board board, User SessionUser) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.createdAt = MyDate.formatToStr(board.getCreatedAt());
+
+            this.userId = board.getUser().getId();
+            this.username = board.getUser().getUsername(); //lazy loading
+            if (SessionUser != null) {
+                this.isOwner = SessionUser.getId() == board.getUser().getId();
+            }
+            this.replies = board.getReplies().stream().map(r -> new ReplyDTO(r)).toList();
+
+
+
         }
     }
 

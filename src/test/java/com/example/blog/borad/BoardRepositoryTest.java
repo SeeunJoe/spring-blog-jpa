@@ -18,6 +18,19 @@ public class BoardRepositoryTest {
     @Autowired // -> 의존성 주입 : Spring
     private BoardRepository boardRepository;
 
+    @Test
+    public void findByIdJoinUserAndReply_test(){
+        int id = 1;
+        boardRepository.findByIdJoinUserAndReply(id);
+    }
+
+
+    @Test
+    public void findByIdJoinUser_test(){
+        int id = 1;
+        boardRepository.findByIdJoinUser(id);
+    }
+
 
     @Test
     public void findById_Test(){

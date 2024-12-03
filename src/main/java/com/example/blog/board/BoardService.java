@@ -1,6 +1,7 @@
 package com.example.blog.board;
 
 import com.example.blog._core.error.ex.Exception404;
+import com.example.blog.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +30,10 @@ public class BoardService {
         return new BoardResponse.UpdateFormDTO(board);
     }
 
-    public BoardResponse.DetailDTO 게시글상세보기(int id) {
-        Board board = boardRepository.findById(id)
+    public BoardResponse.DetailDTO 게시글상세보기(int id, User sessionUser) {
+        Board board = boardRepository.findByIdJoinUserAndReply(id)
                 .orElseThrow( () -> new Exception404("해당 id의 게시글이 없습니다 : "+id));
-        return new BoardResponse.DetailDTO(board);
+        return new BoardResponse.DetailDTO(board,sessionUser);
     }
 
     @Transactional
